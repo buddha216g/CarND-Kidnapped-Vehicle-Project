@@ -193,7 +193,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             double s_y = std_landmark[1];
             double obs_w = ( 1/(2*M_PI*s_x*s_y)) * exp( -( pow(pr_x-o_x,2)/(2*pow(s_x, 2)) + (pow(pr_y-o_y,2)/(2*pow(s_y, 2))) ) );
             
-            // product of this obersvation weight with total observations weight
             particles[i].weight *= obs_w;
         }
     }
@@ -211,19 +210,15 @@ void ParticleFilter::resample() {
         weights.push_back(particles[i].weight);
     }
     
-    // generate random starting index for resampling wheel
     uniform_int_distribution<int> uniintdist(0, num_particles-1);
     auto index = uniintdist(gen);
     
-    // get max weight
     double max_weight = *max_element(weights.begin(), weights.end());
     
-    // uniform random distribution [0.0, max_weight)
     uniform_real_distribution<double> unirealdist(0.0, max_weight);
     
     double beta = 0.0;
     
-    // spin the resample wheel!
     for (int i = 0; i < num_particles; i++) {
         beta += unirealdist(gen) * 2.0;
         while (beta > weights[index]) {
