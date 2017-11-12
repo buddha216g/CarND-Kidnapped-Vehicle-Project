@@ -106,13 +106,8 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
         int map_id = -1;
         
         for (unsigned int j = 0; j < predicted.size(); j++) {
-            // grab current prediction
             LandmarkObs p = predicted[j];
-            
-            // get distance between current/predicted landmarks
             double cur_dist = dist(o.x, o.y, p.x, p.y);
-            
-            // find the predicted landmark nearest the current observed landmark
             if (cur_dist < min_dist) {
                 min_dist = cur_dist;
                 map_id = p.id;
@@ -158,9 +153,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             
             // only consider landmarks within sensor range of the particle
             if (fabs(lm_x - p_x) <= sensor_range && fabs(lm_y - p_y) <= sensor_range) {
-                
-                // add prediction to vector
-                predictions.push_back(LandmarkObs{ lm_id, lm_x, lm_y });
+                    predictions.push_back(LandmarkObs{ lm_id, lm_x, lm_y });
             }
         }
         
